@@ -1,53 +1,47 @@
 package com.example.springdemo.author.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.EqualsAndHashCode;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.springdemo.book.model.Book;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Getter
-@ToString
-@EqualsAndHashCode(of = "id")
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "authors")
 public class Author {
 
-	private final UUID id;
-	private final String firstName;
-	private final String lastName;
-	private final LocalDate birthDate;
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
 
+	@Column(name = "first_name", nullable = false, length = 100)
+	private String firstName;
 
-	public static Author of(UUID id, String firstName, String lastName, LocalDate birthDate) {
-		validate(id, firstName, lastName);
-		return new Author(id, firstName, lastName, birthDate);
-	}
+	@Column(name = "last_name", nullable = false, length = 100)
+	private String lastName;
 
-	public Author update(String newFirstName, String newLastName, LocalDate newBirthDate) {
-		return Author.of(
-				this.id,
-				newFirstName != null ? newFirstName : this.firstName,
-				newLastName != null ? newLastName : this.lastName,
-				newBirthDate != null ? newBirthDate : this.birthDate
-		);
-	}
+	@Column(name = "birth_date")
+	private LocalDate birthDate;
 
-
-	private static void validate(UUID id, String firstName, String lastName) {
-		if (id == null) {
-			throw new IllegalArgumentException("Author id must not be null");
-		}
-		if (firstName == null || firstName.isBlank()) {
-			throw new IllegalArgumentException("Author first name must not be blank");
-		}
-		if (lastName == null || lastName.isBlank()) {
-			throw new IllegalArgumentException("Author last name must not be blank");
-		}
-	}
+	@JsonIgnore
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Book> books = new ArrayList<>();
 }
-

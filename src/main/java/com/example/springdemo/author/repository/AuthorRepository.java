@@ -1,19 +1,13 @@
 package com.example.springdemo.author.repository;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.example.springdemo.author.model.Author;
 
-public interface AuthorRepository {
-
-	List<Author> findAll();
-
-	Optional<Author> findById(UUID id);
-
-	Author save(Author author);
-
-	void deleteById(UUID id);
+@Repository
+public interface AuthorRepository extends JpaRepository<Author, UUID> {
 }
 

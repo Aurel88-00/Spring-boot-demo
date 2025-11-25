@@ -49,8 +49,7 @@ public class AuthorController {
 
 	@PostMapping
 	public ResponseEntity<AuthorResponse> createAuthor(@RequestBody @Valid AuthorRequest request) {
-		var authorRequest = Author.of(UUID.randomUUID(), request.firstName(), request.lastName(), request.birthDate());
-		var author = authorService.createAuthor(authorRequest);
+		var author = authorService.createAuthor(mapToEntity(request));
 		var response = new AuthorResponse(author.getId(), author.getFirstName(), author.getLastName(), author.getBirthDate());
 		return ResponseEntity
 				.created(URI.create("/api/v1/authors/" + response.id()))
@@ -59,8 +58,7 @@ public class AuthorController {
 
 	@PutMapping("/{id}")
 	public AuthorResponse updateAuthor(@PathVariable UUID id, @RequestBody @Valid AuthorRequest request) {
-		var authorRequest = Author.of(UUID.randomUUID(), request.firstName(), request.lastName(), request.birthDate());
-		var author = authorService.updateAuthor(id, authorRequest);
+		var author = authorService.updateAuthor(id, mapToEntity(request));
 		return new AuthorResponse(author.getId(), author.getFirstName(), author.getLastName(), author.getBirthDate());
 	}
 
@@ -68,6 +66,14 @@ public class AuthorController {
 	public ResponseEntity<Void> deleteAuthor(@PathVariable UUID id) {
 		authorService.deleteAuthor(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	private Author mapToEntity(AuthorRequest request) {
+		var author = new Author();
+		author.setFirstName(request.firstName());
+		author.setLastName(request.lastName());
+		author.setBirthDate(request.birthDate());
+		return author;
 	}
 }
 

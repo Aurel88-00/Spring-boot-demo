@@ -31,15 +31,16 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public Author createAuthor(Author authorRequest) {
-		var author = Author.of(UUID.randomUUID(), authorRequest.getFirstName(), authorRequest.getLastName(), authorRequest.getBirthDate());
-		return authorRepository.save(author);
+		return authorRepository.save(authorRequest);
 	}
 
 	@Override
 	public Author updateAuthor(UUID id, Author authorRequest) {
 		var existing = getAuthor(id);
-		var updated = existing.update(authorRequest.getFirstName(), authorRequest.getLastName(), authorRequest.getBirthDate());
-		return authorRepository.save(updated);
+		existing.setFirstName(authorRequest.getFirstName());
+		existing.setLastName(authorRequest.getLastName());
+		existing.setBirthDate(authorRequest.getBirthDate());
+		return authorRepository.save(existing);
 	}
 
 	@Override
