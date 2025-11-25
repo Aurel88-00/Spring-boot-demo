@@ -28,4 +28,5 @@ public class InMemoryBookRepository implements BookRepository {
     public void deleteById(UUID id) {
         storage.remove(id);
     }
+    
 }

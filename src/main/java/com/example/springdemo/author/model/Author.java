@@ -2,8 +2,19 @@ package com.example.springdemo.author.model;
 
 import java.time.LocalDate;
 import java.util.UUID;
+import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
+@Getter
+@ToString
+@EqualsAndHashCode(of = "id")
 public class Author {
 
 	private final UUID id;
@@ -11,12 +22,6 @@ public class Author {
 	private final String lastName;
 	private final LocalDate birthDate;
 
-	private Author(UUID id, String firstName, String lastName, LocalDate birthDate) {
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.birthDate = birthDate;
-	}
 
 	public static Author of(UUID id, String firstName, String lastName, LocalDate birthDate) {
 		validate(id, firstName, lastName);
@@ -32,48 +37,6 @@ public class Author {
 		);
 	}
 
-	public UUID getId() {
-		return id;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public LocalDate getBirthDate() {
-		return birthDate;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		Author author = (Author) o;
-		return id.equals(author.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
-
-	@Override
-	public String toString() {
-		return "Author{" +
-				"id=" + id +
-				", firstName='" + firstName + '\'' +
-				", lastName='" + lastName + '\'' +
-				", birthDate=" + birthDate +
-				'}';
-	}
 
 	private static void validate(UUID id, String firstName, String lastName) {
 		if (id == null) {
