@@ -41,8 +41,8 @@ public class BookServiceImpl implements BookService {
 	@Override
 	@Transactional
 	public Book createBook(BookRequest request) {
-		var author = findAuthor(request.authorId());
-		var book = new Book();
+		Author author = findAuthor(request.authorId());
+		Book book = new Book();
 		applyRequestToEntity(request, book, author);
 		return bookRepository.save(book);
 	}
@@ -50,8 +50,8 @@ public class BookServiceImpl implements BookService {
 	@Override
 	@Transactional
 	public Book updateBook(UUID id, BookRequest request) {
-		var book = getBookById(id);
-		var author = findAuthor(request.authorId());
+		Book book = getBookById(id);
+		Author author = findAuthor(request.authorId());
 		applyRequestToEntity(request, book, author);
 		return bookRepository.save(book);
 	}

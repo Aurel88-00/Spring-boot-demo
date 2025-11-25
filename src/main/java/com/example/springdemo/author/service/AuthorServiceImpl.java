@@ -1,6 +1,5 @@
 package com.example.springdemo.author.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +35,7 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public Author updateAuthor(UUID id, Author authorRequest) {
-		var existing = getAuthor(id);
+		Author existing = getAuthor(id);
 		existing.setFirstName(authorRequest.getFirstName());
 		existing.setLastName(authorRequest.getLastName());
 		existing.setBirthDate(authorRequest.getBirthDate());
