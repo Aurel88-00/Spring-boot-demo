@@ -50,7 +50,8 @@ public class BookServiceImpl implements BookService {
 	@Override
 	@Transactional
 	public Book updateBook(UUID id, BookRequest request) {
-		Book book = getBookById(id);
+		Book book = bookRepository.findById(id)
+				.orElseThrow(() -> new BookNotFoundException(id));
 		Author author = findAuthor(request.authorId());
 		applyRequestToEntity(request, book, author);
 		return bookRepository.save(book);
